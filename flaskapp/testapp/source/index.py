@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import abort, redirect, url_for
 
 app = Flask(__name__)
 @app.route('/')
@@ -20,6 +21,19 @@ def show_user_profile(username):
 def show_post(post_id):
     # show the post with the given id, the id is an integer
     return str(post_id)
+
+@app.route('/redirect_test')
+def redirect_test():
+    return redirect(url_for('login'))
+
+@app.route('/login')
+def login():
+    abort(404)
+    this_is_never_executed()
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 if __name__ == '__main__':
     app.run()
