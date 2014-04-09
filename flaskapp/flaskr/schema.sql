@@ -4,4 +4,3 @@ create table entries (
         title string not null,
         text string not null
 );
-sqlite3 /tmp/flaskr.db < schema.sql
