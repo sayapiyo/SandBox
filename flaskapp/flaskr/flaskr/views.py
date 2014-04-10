@@ -1,5 +1,26 @@
 # -*- coding: utf-8 -*-
-from flaskr import app
+from flask import request, session, redirect, url_for, render_template, flash
+from flaskr import app, db
+from flaskr.models import Entry
+
+@app.route('/')
+def show_entries():
+    entries = Entry.query.order_by(Entry.id.desc()).all()
+    return render_template('show_entries.html', entries=entries)
+
+@app.route('/add', methods=['POST'])
+def add_entry():
+    if not session.get('logged_in'):
+        abort(401)
+    entry = Entry(
+        title=request.form['title'],
+        text=request.form['text']
+        )
+    db.session.add(entry)
+    db.session.commit()
+    flash('New entry was successfully posted')
+    return redirect(url_for('show_entries'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
