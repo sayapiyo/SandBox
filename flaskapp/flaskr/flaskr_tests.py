@@ -1,28 +1,28 @@
 import os
-import flaskr
+from flaskr import app, db
 import unittest
 import tempfile
 
 class FlaskrTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.db_fd, flaskr.DATABASE = tempfile.mkstemp()
-        self.app = flaskr.app.test_client()
-        flaskr.init_db()
+        self.db_fd, app.DATABASE = tempfile.mkstemp()
+        self.app = app.test_client()
+        db.create_all()
 
     def tearDown(self):
         os.close(self.db_fd)
-        os.unlink(flaskr.DATABASE)
-        
+        os.unlink(app.DATABASE)
+
     def test_empty_db(self):
         rv = self.app.get('/')
         assert 'No entries here so far' in rv.data
 
     def login(self, username, password):
         return self.app.post('/login', data=dict(
-            username=username,
-            password=password
-        ), follow_redirects=True)
+                    username=username,
+                    password=password
+                    ), follow_redirects=True)
 
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)

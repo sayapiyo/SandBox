@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, redirect, url_for, render_template, flash
+from flask import request, session, redirect, url_for, render_template, flash, abort
 from flaskr import app, db
 from flaskr.models import Entry
 
@@ -40,3 +40,16 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
+
+@app.route('/redirect_test')
+def redirect_test():
+    return redirect(url_for('error'))
+
+@app.route('/error')
+def error():
+    abort(404)
+    this_is_never_executed()
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
