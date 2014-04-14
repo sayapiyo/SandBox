@@ -9,7 +9,7 @@ from Tkinter import (
 import time
 
 class App(Frame):
-    TIME = 10 * 1
+    TIME = 60 * 3
     TIME_FORMAT = "%02d:%02d"
 
     def __init__(self, master=None):
